@@ -15,4 +15,8 @@ class BookRepository(val remoteDataSource: IBookRemoteDataSource, private val lo
         this.localDataSource.saveBook(book)
         return true
     }
+
+    suspend fun getFavoriteBooks(): List<Book>{
+        return this.localDataSource.getFavoriteBooks()
+    }
 }

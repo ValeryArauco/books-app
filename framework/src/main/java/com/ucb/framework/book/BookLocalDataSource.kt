@@ -18,4 +18,8 @@ class BookLocalDataSource(val context: Context) : IBookLocalDataSource {
         bookEntityDAO.insert(book.toEntity())
         return true
     }
+
+    override suspend fun getFavoriteBooks():List<Book>{
+        return bookEntityDAO.getFavoriteBooks().map { it.toModel() }
+    }
 }

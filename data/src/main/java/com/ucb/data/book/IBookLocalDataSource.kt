@@ -5,4 +5,5 @@ import com.ucb.domain.Gitalias
 
 interface IBookLocalDataSource {
     suspend fun saveBook(book: Book): Boolean
+    suspend fun getFavoriteBooks():List<Book>
 }

@@ -50,13 +50,11 @@ import com.ucb.ucbtest.navigation.Screen
 
 
 @Composable
-fun LibrosFavoritosUI(navController: NavController,
-                   viewModel: BuscarLibrosViewModel = hiltViewModel()
-
+fun LibrosFavoritosUI(
+    navController: NavController,
+    viewModel: LibrosFavoritosViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    var searchQuery by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
         bottomBar = {
@@ -68,15 +66,15 @@ fun LibrosFavoritosUI(navController: NavController,
                     IconButton(onClick = { navController.navigate(Screen.BuscarLibrosScreen.route) }) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Buscar libros",
-                            tint = MaterialTheme.colorScheme.primary
+                            contentDescription = "Buscar libros"
                         )
                     }
 
-                    IconButton(onClick = { navController.navigate(Screen.LibrosFavoritosScreen.route)}) {
+                    IconButton(onClick = { /* Ya estamos en esta pantalla */ }) {
                         Icon(
                             imageVector = Icons.Default.Favorite,
-                            contentDescription = "Favoritos"
+                            contentDescription = "Favoritos",
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -95,20 +93,9 @@ fun LibrosFavoritosUI(navController: NavController,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Barra de búsqueda
-
             // Contenido según el estado
             when (state) {
-                is BuscarLibrosViewModel.SearchState.Initial -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "Aún no has añadido libros a favoritos")
-                    }
-                }
-
-                is BuscarLibrosViewModel.SearchState.Loading -> {
+                is LibrosFavoritosViewModel.FavoritesState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -117,7 +104,7 @@ fun LibrosFavoritosUI(navController: NavController,
                     }
                 }
 
-                is BuscarLibrosViewModel.SearchState.Empty -> {
+                is LibrosFavoritosViewModel.FavoritesState.Empty -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -133,7 +120,7 @@ fun LibrosFavoritosUI(navController: NavController,
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "Ningún libro coincide con tu búsqueda",
+                                text = "Aún no has añadido libros a favoritos",
                                 style = MaterialTheme.typography.bodyLarge,
                                 textAlign = TextAlign.Center
                             )
@@ -141,19 +128,19 @@ fun LibrosFavoritosUI(navController: NavController,
                     }
                 }
 
-                is BuscarLibrosViewModel.SearchState.Success -> {
-                    val books = (state as BuscarLibrosViewModel.SearchState.Success).books
+                is LibrosFavoritosViewModel.FavoritesState.Success -> {
+                    val books = (state as LibrosFavoritosViewModel.FavoritesState.Success).books
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(books) { book ->
-                            BookItem(book = book, viewModel)
+                            FavoriteBookItem(book = book)
                         }
                     }
                 }
 
-                is BuscarLibrosViewModel.SearchState.Error -> {
-                    val errorMessage = (state as BuscarLibrosViewModel.SearchState.Error).message
+                is LibrosFavoritosViewModel.FavoritesState.Error -> {
+                    val errorMessage = (state as LibrosFavoritosViewModel.FavoritesState.Error).message
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -183,3 +170,34 @@ fun LibrosFavoritosUI(navController: NavController,
     }
 }
 
+@Composable
+fun FavoriteBookItem(book: Book) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = book.title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Autor(es): ${book.authors?.joinToString(", ")}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Año de publicación: ${book.publishYear}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}

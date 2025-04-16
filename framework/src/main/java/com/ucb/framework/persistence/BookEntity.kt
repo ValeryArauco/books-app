@@ -13,7 +13,7 @@ data class BookEntity(
     var title: String,
     @ColumnInfo(name = "author")
     var authors: String,
-    @ColumnInfo(name = "alias")
+    @ColumnInfo(name = "year")
     var year: String
 ) {
     @PrimaryKey(autoGenerate = true)

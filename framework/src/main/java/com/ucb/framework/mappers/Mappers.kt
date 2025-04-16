@@ -50,3 +50,11 @@ fun Book.toEntity(): BookEntity {
         year = publishYear.toString()
     )
 }
+
+fun BookEntity.toModel(): Book {
+    return Book(
+        title = title,
+        authors = authors.split(","),
+        publishYear = year.toString()
+    )
+}

@@ -33,6 +33,7 @@ import javax.inject.Singleton
 import com.ucb.framework.datastore.LoginDataSource
 import com.ucb.framework.push.FirebaseNotificationDataSource
 import com.ucb.usecases.GetEmailKey
+import com.ucb.usecases.GetFavoriteBooks
 import com.ucb.usecases.ObtainToken
 import com.ucb.usecases.SaveBook
 import com.ucb.usecases.SearchBooks
@@ -168,5 +169,11 @@ object AppModule {
     @Singleton
     fun provideSaveBook(bookRepository: BookRepository): SaveBook {
         return SaveBook(bookRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetFavoriteBooks(bookRepository: BookRepository): GetFavoriteBooks {
+        return GetFavoriteBooks(bookRepository)
     }
 }
