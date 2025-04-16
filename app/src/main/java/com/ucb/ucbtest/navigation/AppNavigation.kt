@@ -12,6 +12,7 @@ import com.ucb.domain.Movie
 import com.ucb.ucbtest.counter.CounterUI
 import com.ucb.ucbtest.gitalias.GitaliasUI
 import com.ucb.ucbtest.libros.BuscarLibrosUI
+import com.ucb.ucbtest.libros.LibrosFavoritosUI
 import com.ucb.ucbtest.login.LoginUI
 import com.ucb.ucbtest.movie.MoviesUI
 import com.ucb.ucbtest.moviedetail.MovieDetailUI
@@ -87,9 +88,12 @@ fun AppNavigation() {
             CounterUI()
         }
         composable(Screen.BuscarLibrosScreen.route) {
-            BuscarLibrosUI()
+            BuscarLibrosUI(navController)
         }
 
+        composable(Screen.LibrosFavoritosScreen.route) {
+            LibrosFavoritosUI(navController)
+        }
     }
 
 
