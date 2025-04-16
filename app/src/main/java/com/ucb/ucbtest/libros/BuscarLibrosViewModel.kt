@@ -1,12 +1,14 @@
 package com.ucb.ucbtest.libros
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ucb.data.NetworkResult
 import com.ucb.domain.Book
 import com.ucb.ucbtest.R
 import com.ucb.ucbtest.service.InternetConnection
+import com.ucb.usecases.SaveBook
 import com.ucb.usecases.SearchBooks
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,7 +20,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class BuscarLibrosViewModel @Inject constructor (private val searchBooks: SearchBooks, @ApplicationContext private val context: Context): ViewModel(){
+class BuscarLibrosViewModel @Inject constructor (
+    private val searchBooks: SearchBooks,
+    private val saveBook: SaveBook,
+    @ApplicationContext private val context: Context): ViewModel(){
     sealed class SearchState {
         object Initial : SearchState()
         object Loading : SearchState()
@@ -53,4 +58,17 @@ class BuscarLibrosViewModel @Inject constructor (private val searchBooks: Search
 
         }
     }
+
+    fun saveBook(book: Book) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    saveBook.invoke(book)
+                }
+            } catch (e: Exception) {
+                Log.e("BuscarLibrosViewModel", "Error al guardar el libro", e)
+            }
+        }
+    }
+
 }

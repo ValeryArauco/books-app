@@ -181,7 +181,7 @@ fun BuscarLibrosUI(navController: NavController,
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(books) { book ->
-                            BookItem(book = book)
+                            BookItem(book = book, viewModel)
                         }
                     }
                 }
@@ -218,7 +218,7 @@ fun BuscarLibrosUI(navController: NavController,
 }
 
 @Composable
-fun BookItem(book: Book) {
+fun BookItem(book: Book, viewModel: BuscarLibrosViewModel) {
     var isFavorite by remember { mutableStateOf(false) }
 
     Card(
@@ -255,7 +255,9 @@ fun BookItem(book: Book) {
             }
 
             IconButton(
-                onClick = { isFavorite = !isFavorite }
+                onClick = {
+                    viewModel.saveBook(book)
+                    isFavorite = !isFavorite }
             ) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,

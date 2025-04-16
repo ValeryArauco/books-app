@@ -147,7 +147,7 @@ fun LibrosFavoritosUI(navController: NavController,
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(books) { book ->
-                            BookItem(book = book)
+                            BookItem(book = book, viewModel)
                         }
                     }
                 }

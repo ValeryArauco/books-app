@@ -6,6 +6,7 @@ import com.ucb.domain.Movie
 import com.ucb.framework.dto.AvatarResponseDto
 import com.ucb.framework.dto.BookDto
 import com.ucb.framework.dto.MovieDto
+import com.ucb.framework.persistence.BookEntity
 import com.ucb.framework.persistence.GitAccount
 
 fun AvatarResponseDto.toModel(): Gitalias {
@@ -39,5 +40,13 @@ fun BookDto.toModel(): Book {
         title = title,
         authors = author,
         publishYear = year.toString()
+    )
+}
+
+fun Book.toEntity(): BookEntity {
+    return BookEntity(
+        title = title,
+        authors = authors.toString(),
+        year = publishYear.toString()
     )
 }

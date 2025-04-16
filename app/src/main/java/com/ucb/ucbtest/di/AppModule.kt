@@ -6,12 +6,14 @@ import com.ucb.data.GithubRepository
 import com.ucb.data.LoginRepository
 import com.ucb.data.MovieRepository
 import com.ucb.data.PushNotificationRepository
+import com.ucb.data.book.IBookLocalDataSource
 import com.ucb.data.book.IBookRemoteDataSource
 import com.ucb.data.datastore.ILoginDataStore
 import com.ucb.data.git.IGitRemoteDataSource
 import com.ucb.data.git.ILocalDataSource
 import com.ucb.data.movie.IMovieRemoteDataSource
 import com.ucb.data.push.IPushDataSource
+import com.ucb.framework.book.BookLocalDataSource
 import com.ucb.framework.book.BookRemoteDataSource
 import com.ucb.framework.github.GithubLocalDataSource
 import com.ucb.framework.github.GithubRemoteDataSource
@@ -32,6 +34,7 @@ import com.ucb.framework.datastore.LoginDataSource
 import com.ucb.framework.push.FirebaseNotificationDataSource
 import com.ucb.usecases.GetEmailKey
 import com.ucb.usecases.ObtainToken
+import com.ucb.usecases.SaveBook
 import com.ucb.usecases.SearchBooks
 
 @Module
@@ -144,13 +147,26 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun bookRepository(localDataSource: IBookRemoteDataSource): BookRepository {
-        return BookRepository(localDataSource)
+    fun provideBookLocalDataSource(@ApplicationContext context: Context): IBookLocalDataSource {
+        return BookLocalDataSource(context)
+    }
+
+
+    @Provides
+    @Singleton
+    fun bookRepository(bookRemoteDataSource: IBookRemoteDataSource, bookLocalDataSource: IBookLocalDataSource): BookRepository {
+        return BookRepository(bookRemoteDataSource, bookLocalDataSource)
     }
 
     @Provides
     @Singleton
     fun provideSearchBook(bookRepository: BookRepository): SearchBooks {
         return SearchBooks(bookRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSaveBook(bookRepository: BookRepository): SaveBook {
+        return SaveBook(bookRepository)
     }
 }
