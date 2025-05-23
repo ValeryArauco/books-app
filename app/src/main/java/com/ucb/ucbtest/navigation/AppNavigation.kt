@@ -16,6 +16,7 @@ import com.ucb.ucbtest.libros.LibrosFavoritosUI
 import com.ucb.ucbtest.login.LoginUI
 import com.ucb.ucbtest.movie.MoviesUI
 import com.ucb.ucbtest.moviedetail.MovieDetailUI
+import com.ucb.ucbtest.planes.PlanesUI
 import com.ucb.ucbtest.takephoto.TakePhotoUI
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -28,7 +29,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.BuscarLibrosScreen.route,
+        startDestination = Screen.PlanesScreen.route,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
@@ -93,6 +94,10 @@ fun AppNavigation() {
 
         composable(Screen.LibrosFavoritosScreen.route) {
             LibrosFavoritosUI(navController)
+        }
+
+        composable(Screen.PlanesScreen.route) {
+            PlanesUI()
         }
     }
 
